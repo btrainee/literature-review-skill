@@ -108,15 +108,7 @@ python generate_word_report.py "Nature_2025_Topic_LiteratureReview.docx"
 4. **吸收图内文字** —— 只吸收"紧凑"（短高或窄宽、≤4 行）且与图区水平重叠或紧邻的文字块；`beside` 模式下要求文字块起始于图形底边之上，防止吞进正文；
 5. **渲染** —— 按 bbox `clip` 出 PNG。
 
-已实测通过的版式：
 
-| 期刊 | 图数 | 结果 |
-|---|---|---|
-| Nature（TRACERx 肺癌） | 4/4 | 整页大图正常 |
-| Nature（NSCLC 转移） | 4/4 | Fig4 图注在右栏顶部 → beside |
-| Nature（拷贝数多样性） | 6/6 | 含 `Number at risk` 表格行 |
-| Cancer Cell（南京队列） | 5/5 | 图注在下一页 → prev-page；彩条页眉 |
-| Cell Genomics（泛基因组） | 5/5 | beside + 正文防误吸 |
 
 **提完必须看一眼。** 脚本会把 `status` 写进 `captions.json`（`above` / `beside` / `prev-page` / `fallback`），看到 `fallback` 就要人工核对——宁可重渲染一个 bbox，也不要往报告里贴一张缺 panel 的图。
 
@@ -139,11 +131,6 @@ python generate_word_report.py "Nature_2025_Topic_LiteratureReview.docx"
 | 9 | 局限性分析 | 作者自述 + 你自己看出的问题（分开写） |
 | 10 | 总结 | 结论与对自身工作的启示 |
 
-排版上踩过的坑都固化进脚本了：
-
-- 表格表头必须**显式填深色底**，否则白字在 Word 里看不见；
-- 图片按「宽 15.5 cm、最高 18.5 cm」等比缩放，否则竖长的多 panel Manhattan 图会溢出页面被裁掉；
-- 跨页表格给表头加 `w:tblHeader`、每行加 `w:cantSplit`，否则后半张表没有表头。
 
 ---
 
@@ -176,9 +163,7 @@ python generate_word_report.py "Nature_2025_Topic_LiteratureReview.docx"
 
 ## 说明
 
-- 本仓库只包含 Skill 本身（文档 + 脚本），**不包含任何论文 PDF、提取的图片或生成的报告**。请只处理你有权访问的文献，产出的报告与图片不要随仓库分发。
-- 脚本用 PyMuPDF 渲染 PDF 页面区域，属于对你自己合法持有文档的本地处理，不改变原始文件。
-- 在 Nature / Cancer Cell / Cell Genomics 的 PDF 上做过实测，其他版式（尤其双栏排版不规则的预印本、扫描版 PDF）可能需要调整 `--header-frac`、`--gap` 等参数。扫描版 PDF 没有文本层，图注定位不出来——那种情况需要先 OCR。
+- 在 Nature / Cancer Cell / Cell Genomics 的 PDF 上做过实测，其他版式（尤其双栏排版不规则的预印本、扫描版 PDF）可能需要调整 `--header-frac`、`--gap` 等参数。扫描版 PDF 没有文本层，图注定位不出来——那种情况需要先 OCR，可以安装后按需更改
 
 ## License
 
